@@ -2,6 +2,12 @@ body{
     background-color: azure;
 }
 
+#debugSection {
+    border: solid 2px;
+    display:flex;
+    flex-direction: row;
+}
+
 .formAllWrapper{
     display:flex;
     flex-direction: row;
