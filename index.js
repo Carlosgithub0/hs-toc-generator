@@ -2,7 +2,7 @@ const buttonGenerate = document.querySelector("#generateToc");
 const buttonGenerateIdealResult = document.querySelector("#generateIdealResult");
 const textBefore = document.querySelector("#textBefore");
 const textAfter = document.querySelector("#textAfter");
-const search = /(<h[2-3]>)(.*)(<\/h[2-3]>)/g;
+const search = /<(h[23])>(.*)<\/\1>/g;
 // const searchTOC = /h1/g;
 const log = document.querySelector("#log");
 
@@ -35,7 +35,7 @@ textAfter.value = `<!--TOC START-->\n<div class="table-of-content">
 /* Button */
 function generateToc(){
     addToc();
-    addAnchors();
+    //addAnchors();
     document.querySelector("#headerResult").innerHTML="Result"
     
     function addAnchors(){// TODO treat $2 to make it URL-friendly
@@ -44,18 +44,20 @@ function generateToc(){
     }
     
     function addToc() { // TODO catch only headers
-        //Find the section that will be replaced
-        const tocContent = [...textBefore.value.matchAll(search)];
-        logged = tocContent.values()
-        log.innerHTML = logged;
-        console.log(logged);
-       
-        // State what will replace it
-        const replaceToc = "<li><a href='$2'>$2</a></li>"; 
+      tocContent = ""
+      anchorContent = ""
+      // Find all h2,h3 headers
+      for (const match of textBefore.value.matchAll(/<(h[23])>(.*)<\/\1>/g)) {
+        const ref = match[2].replaceAll(" ", "-").toLowerCase();
+        tocLine = "<li><a href=" + ref + ">" + match[2] + "</a></li>";
+        //console.log("tocLine " + tocLine);
+        //console.log(match[0] + ":" + match[1] + ":" + match[2]);
+        tocContent += tocLine + "\n";
 
-        // Replace
-
-        textAfter.value = tocContent
+        anchorLine = "<a id=`" + ref + "` data-hs-anchor='true'></a>\n" + match[0];
+        anchorContent += anchorLine + "\n"
+      }
+        textAfter.value = tocContent + "\n\n" + anchorContent
 
         
         // Build TOC
