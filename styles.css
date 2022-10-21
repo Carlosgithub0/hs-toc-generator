@@ -1,0 +1,24 @@
+body{
+    background-color: azure;
+}
+
+.formAllWrapper{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 800px;
+}
+
+.formBeforeWrapper, .formAfterWrapper{
+margin:10px
+}
+
+textarea {
+    resize: none;
+}
+
+button{
+    display:flex;
+    max-height: 40px;
+    margin:5px;
+}

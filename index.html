@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+
+
+<h1>HubSpot TOC Generator</h1>
+<div class="formAllWrapper">
+    
+    <div class="formBeforeWrapper">
+        <h2>Insert Copy</h2>
+        <textarea id="textBefore" rows="20" cols="50" autofocus ></textarea>
+    </div>
+    <button id="generateToc">Generate TOC</button>
+    <button id="generateIdealResult">Ideal Result</button>
+
+
+    <div class="formAfterWrapper">
+        <h2 id="headerResult">Result</h2>
+        <textarea id="textAfter" rows="20" cols="50" readonly></textarea>
+    </div>
+</div>
+<textarea id="log">Text</textarea>
+  
+        <script src="index.js" async defer></script>
+    </body>
+</html>
