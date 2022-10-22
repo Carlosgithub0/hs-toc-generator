@@ -1,88 +1,60 @@
-const buttonGenerate = document.querySelector("#generateToc");
-const buttonSampleBasic= document.querySelector("#generateSampleBasic");
-const buttonSampleComplex= document.querySelector("#generateSampleComplex");
+const btnGenerateToc = document.querySelector("#btnGenerateToc");
+const btnOldBasic = document.querySelector("#btnOldBasic");
+const btnOldComplex = document.querySelector("#btnOldComplex");
+const btnNewBasic = document.querySelector("#btnNewBasic")
 const textOld = document.querySelector("#textOld"); // renamed from before to Old
 const textNew = document.querySelector("#textNew"); // renamed from after to New
 const textView = document.querySelector("#textView");
-const search = /<(h[23])>(.*)<\/\1>/gi; // made it i
+const search = /<(h[23])>(.*)<\/\1>/gi; // added i flag
 
 generateSampleBasic();
 
-document.querySelector("#textView").innerHTML = textOld.value;
+textView.innerHTML = textOld.value;
 
 /* Button */
 function generateToc(){
-    addToc();
+  /* Structure:
+  1. Toc -> tocContentBefore, tocContent, tocContentAfter
+  2. textContent 
+  */
+  tocContentBefore = `<div class="table-of-content">\n<p><b>Table of Contents</b></p>\n<ol>\n`
+  tocContent = ""
+  tocContentAfter = `</ol>\n</div>\n\n`
+  textContentNew = textOld.value
 
-    function addToc() { 
-        /* Structure is
-        Toc -> tocContentBefore, tocContent, tocContentAfter
-        Content -> All blog text
-        */
-      tocContentBefore = `<div class="table-of-content">\n<p><b>Table of Contents</b></p>\n<ol>\n`
-      tocContent = ""
-      tocContentAfter = `</ol>\n</div>\n\n`
-      contentNew = ""
+  // Assemble TOC + full blog text with anchors
+  function assembleResult(){
+    textNew.value = tocContentBefore + tocContent + tocContentAfter + textContentNew;
+    textView.innerHTML = textNew.value; // Show result in User View panel
+  }
 
-      // Find all h2,h3 headers
-    //   for (const match of textBefore.value.matchAll(search) {
-    //     const ref = match[2].replaceAll(" ", "-").toLowerCase();
-    //     tocLine = "<li><a href=#" + ref + ">" + match[2] + "</a></li>";
-    //     tocContent += tocLine + "\n";
-    //     anchorLine = "<a id=`" + ref + "` data-hs-anchor='true'></a>\n" + match[0];
-    //     tocContentAfter += anchorLine + "\n"
-    //   }
-
-    for (const match of textOld.value.matchAll(search)) {
-        // Generate TOC
-        const ref = match[2].replaceAll(" ", "-").toLowerCase();
-        tocLine = "<li><a href=#" + ref + ">" + match[2] + "</a></li>";
-        tocContent += tocLine + "\n";   
-
-        // Generate and print new content
-        anchorLine = "<a id=`#" + ref + "` data-hs-anchor='true'></a>\n" + match[0];
-        contentNew = textOld.value.replace(search,anchorLine) + "\n";
-
-        }
-
-      textNew.value = tocContentBefore + tocContent + tocContentAfter + contentNew;
-
-      textView.innerHTML = textNew.value;
-
+  // Generate TOC
+  for (const match of textOld.value.matchAll(search)) {
+    const ref = match[2].replaceAll(" ", "-").toLowerCase();
+    tocLine = "<li><a href=#\"" + ref + "\">" + match[2] + "</a></li>";
+    tocContent += tocLine + "\n"; 
     }
+
+  // Add anchors to text (textContentNew)
+  for (const match of textOld.value.matchAll(search)) {
+    const ref = match[2].replaceAll(" ", "-").toLowerCase();
+    anchorLine = "<a id=`#" + ref + "` data-hs-anchor='true'></a>\n" + match[0] + "\n";  
+    textContentNew.replace(search,anchorLine);
+    }
+
+  assembleResult();
     
 }
-
 
 function generateSampleBasic(){
 textOld.value = `<p>p text</p>
 <h2>h2 Text</h2>
 <p>p text 1</p>
-<h3>h3 Text</h3>
-<p>p text 2</p>
-<p>p text 3</p>`
-}
-
-
-function generateIdealBasicResult(){
-textNew.value = `<div class="table-of-content">
-<p><b>Table of Contents</b></p>
-<ol>
-<li><a href=#h2-text>h2 Text</a></li>
-<li><a href=#h3-text>h3 Text</a></li>
-</ol>
-</div>
-
-<p>p text</p>
-<a id="#h2-text" data-hs-anchor='true'></a>
-<h2>h2 Text</h2>
-<p>p text 1</p>
-<a id="#h3-text" data-hs-anchor='true'></a>
-<h3>h3 Text</h3>
+<h3>h3 Text 1</h3>
 <p>p text 2</p>
 <p>p text 3</p>
-`
-
+<h3>h3 Text 2</h3>
+<p>p text 4</p>`
 }
 
 function generateSampleComplex() {
@@ -185,18 +157,44 @@ function generateSampleComplex() {
     <p>&nbsp;</p>`
 }
 
-buttonGenerate.addEventListener("click", () =>
-generateToc(buttonGenerate)
+function generateIdealBasicResult(){
+textNew.value = `<div class="table-of-content">
+<p><b>Table of Contents</b></p>
+<ol>
+<li><a href=#"h2-text">h2 Text</a></li>
+<li><a href=#"h3-text-1">h3 Text 1</a></li>
+<li><a href=#"h3-text-2">h3 Text 2</a></li>
+</ol>
+</div>
+
+<p>p text</p>
+<a id="#h2-text" data-hs-anchor='true'></a>
+<h2>h2 Text</h2>
+<p>p text 1</p>
+<a id="#h3-text-1" data-hs-anchor='true'></a>
+<h3>h3 Text 1</h3>
+<p>p text 2</p>
+<p>p text 3</p>
+<a id="#h3-text-2" data-hs-anchor='true'></a>
+<h3>h3 Text 2</h3>
+<p>p text 4</p>
+`
+  textView.innerHTML = textNew.value;
+  
+  }
+
+btnGenerateToc.addEventListener("click", () =>
+generateToc(btnGenerateToc)
 );
 
-buttonSampleBasic.addEventListener("click", () =>
-generateSampleBasic(buttonSampleBasic)
+btnOldBasic.addEventListener("click", () =>
+generateSampleBasic(btnOldBasic)
 );
 
-buttonSampleComplex.addEventListener("click", () =>
-generateSampleComplex(buttonSampleComplex)
+btnOldComplex.addEventListener("click", () =>
+generateSampleComplex(btnOldComplex)
 );
 
-generateIdealResultBasic.addEventListener("click", () =>
-generateIdealBasicResult(generateIdealResultBasic)
+btnNewBasic.addEventListener("click", () =>
+generateIdealBasicResult(btnNewBasic)
 );
