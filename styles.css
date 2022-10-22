@@ -1,9 +1,13 @@
+*{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+}
+
 body{
     background-color: azure;
 }
 
-#debugSection {
-    border: solid 2px;
+.debugButtonsWrapper {
     display:flex;
     flex-direction: row;
 }
@@ -15,12 +19,19 @@ body{
     width: 800px;
 }
 
+
 .formBeforeWrapper, .formAfterWrapper, .formViewWrapper{
 margin:10px
 }
 
 .formViewWrapper{
-    min-width: 300px;
+    min-width: 400px;
+}
+
+.formButtonWrapper{
+    display:flex;
+    align-items: center;
+    height:435px;
 }
 
 textarea {

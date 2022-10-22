@@ -3,6 +3,7 @@ const buttonSampleBasic= document.querySelector("#generateSampleBasic");
 const buttonSampleComplex= document.querySelector("#generateSampleComplex");
 const textOld = document.querySelector("#textOld"); // renamed from before to Old
 const textNew = document.querySelector("#textNew"); // renamed from after to New
+const textView = document.querySelector("#textView");
 const search = /<(h[23])>(.*)<\/\1>/gi; // made it i
 
 generateSampleBasic();
@@ -39,14 +40,14 @@ function generateToc(){
         tocContent += tocLine + "\n";   
 
         // Generate and print new content
-        anchorLine = "<a id=`" + ref + "` data-hs-anchor='true'></a>\n" + match[0];
-        contentNew += textOld.value.replace(search,anchorLine) + "\n";
+        anchorLine = "<a id=`#" + ref + "` data-hs-anchor='true'></a>\n" + match[0];
+        contentNew = textOld.value.replace(search,anchorLine) + "\n";
 
         }
 
       textNew.value = tocContentBefore + tocContent + tocContentAfter + contentNew;
 
-      document.querySelector("#textView").innerHTML = textNew.value;
+      textView.innerHTML = textNew.value;
 
     }
     
@@ -76,8 +77,8 @@ textNew.value = `<div class="table-of-content">
 <a id="#h2-text" data-hs-anchor='true'></a>
 <h2>h2 Text</h2>
 <p>p text 1</p>
-<a id="#h2-text" data-hs-anchor='true'></a>
-<h2>h2 Text</h2>
+<a id="#h3-text" data-hs-anchor='true'></a>
+<h3>h3 Text</h3>
 <p>p text 2</p>
 <p>p text 3</p>
 `
