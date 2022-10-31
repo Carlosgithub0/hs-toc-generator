@@ -2,10 +2,10 @@ const btnGenerateToc = document.querySelector("#btnGenerateToc");
 const btnOldBasic = document.querySelector("#btnOldBasic");
 const btnOldComplex = document.querySelector("#btnOldComplex");
 const btnNewBasic = document.querySelector("#btnNewBasic")
-const textOld = document.querySelector("#textOld"); // renamed from before to Old
-const textNew = document.querySelector("#textNew"); // renamed from after to New
+const textOld = document.querySelector("#textOld"); 
+const textNew = document.querySelector("#textNew");
 const textView = document.querySelector("#textView");
-const search = /<(h[23])>(.*)<\/\1>/gi; // added i flag
+const search = /<(h[23])>(.*)<\/\1>/gi; // should get h2 and h3 headers only, plus content inside
 
 generateSampleBasic();
 
@@ -31,7 +31,7 @@ function generateToc(){
   // Generate TOC
   for (const match of textOld.value.matchAll(search)) {
     const ref = match[2].replaceAll(" ", "-").toLowerCase();
-    tocLine = "<li><a href=#\"" + ref + "\">" + match[2] + "</a></li>";
+    tocLine = "<li><a href=\"#" + ref + "\">" + match[2] + "</a></li>";
     tocContent += tocLine + "\n"; 
     }
 
@@ -161,9 +161,9 @@ function generateIdealBasicResult(){
 textNew.value = `<div class="table-of-content">
 <p><b>Table of Contents</b></p>
 <ol>
-<li><a href=#"h2-text">h2 Text</a></li>
-<li><a href=#"h3-text-1">h3 Text 1</a></li>
-<li><a href=#"h3-text-2">h3 Text 2</a></li>
+<li><a href="#h2-text">h2 Text</a></li>
+<li><a href="#h3-text-1">h3 Text 1</a></li>
+<li><a href="#h3-text-2">h3 Text 2</a></li>
 </ol>
 </div>
 
