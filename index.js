@@ -8,7 +8,7 @@ const textNew = document.querySelector("#textNew");
 const textView = document.querySelector("#textView");
 
 // regex rules // 
-const search = /<(h[23])>(.*)<\/\1>/gi; // should get h2 and h3 headers only, plus content inside
+const isHeaderRegex = /<(h[23])>(.*)<\/\1>/i; // should get h2 and h3 headers only, plus content inside
 const regexBody = /(?<=<a id='#)(.*)(?=' data-hs-anchor='true')/gi;
 
 
@@ -26,7 +26,7 @@ function generateToc(){
   tocContentBefore = `<div class="table-of-content">\n<p><b>Table of Contents</b></p>\n<ol>\n`
   tocContent = ""
   tocContentAfter = `</ol>\n</div>\n\n`
-  textContentNew = textOld.value
+  textContentNew = ""//textOld.value
 
   // Assemble TOC + full blog text with anchors
   function assembleResult(){
@@ -34,22 +34,43 @@ function generateToc(){
     textView.innerHTML = textNew.value; // Show result in User View panel
   }
 
+	for (const line of textOld.value.split('\n')) {
+		//console.log("Line is " + line)
+		// It is a header
+		match = line.match(isHeaderRegex)
+		if (match != null) {
+			//console.log("match is " + match)
+			const ref = match[2].replaceAll(" ", "-").toLowerCase();
+			//console.log("ref is " + ref)
+			anchor = createAnchor(ref)
+			//console.log("anchor line is " + anchor)
+			textContentNew += anchor// + line + "\n"
+			tocLine = createTocLine(ref, match[2])
+			//console.log("toc line is " + tocLine)
+			tocContent += tocLine
+		} else {
+			//console.log("Not a header: " + line)
+		}
+			textContentNew += line + "\n"
+	}
+
   // Generate TOC
-  for (const match of textOld.value.matchAll(search)) {
-    const ref = match[2].replaceAll(" ", "-").toLowerCase();
-    tocLine = "<li><a href=\"#" + ref + "\">" + match[2] + "</a></li>";
-    tocContent += tocLine + "\n"; 
-    }
+  // for (const match of textOld.value.matchAll(search)) {
+  //   const ref = match[2].replaceAll(" ", "-").toLowerCase();
+  //   tocContent += tocLine + "\n"; 
+  //   }
 
-    // Add anchors to text (textContentNew)
-    function updateText() {
-      anchorLine = "<a id=\"#$2\" data-hs-anchor='true'></a>\n<$1>$2</$1>"; // This is an anchor
-      textContentNew = textContentNew.replace(search,anchorLine) // Replaces headers with headers plus anchors
-          
-      //FIXME the anchors link should also be URL-friendly
-    }
+	// Add anchors to text (textContentNew)
+	function createAnchor(ref) {
+		//FIXME the anchors link should also be URL-friendly
+		return `<a id="#${ref}" data-hs-anchor='true'></a>\n`; // This is an anchor
+		//textContentNew = textContentNew.replace(search,anchorLine) // Replaces headers with headers plus anchors
+	}
 
-  updateText();
+	function createTocLine(ref, header) {
+		return `<li><a href="#${ref}">` + header + "</a></li>\n";
+	}
+
   assembleResult();
     
 }
