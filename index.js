@@ -1,3 +1,4 @@
+// Aliases // 
 const btnGenerateToc = document.querySelector("#btnGenerateToc");
 const btnOldBasic = document.querySelector("#btnOldBasic");
 const btnOldComplex = document.querySelector("#btnOldComplex");
@@ -5,10 +6,15 @@ const btnNewBasic = document.querySelector("#btnNewBasic")
 const textOld = document.querySelector("#textOld"); 
 const textNew = document.querySelector("#textNew");
 const textView = document.querySelector("#textView");
+
+// regex rules // 
 const search = /<(h[23])>(.*)<\/\1>/gi; // should get h2 and h3 headers only, plus content inside
+const regexBody = /(?<=<a id='#)(.*)(?=' data-hs-anchor='true')/gi;
+
 
 generateSampleBasic();
 
+// Add sample at the start //
 textView.innerHTML = textOld.value;
 
 /* Button */
@@ -35,13 +41,15 @@ function generateToc(){
     tocContent += tocLine + "\n"; 
     }
 
-  // Add anchors to text (textContentNew)
-  for (const match of textOld.value.matchAll(search)) {
-    const ref = match[2].replaceAll(" ", "-").toLowerCase();
-    anchorLine = "<a id=`#" + ref + "` data-hs-anchor='true'></a>\n" + match[0] + "\n";  
-    textContentNew.replace(search,anchorLine);
+    // Add anchors to text (textContentNew)
+    function updateText() {
+      anchorLine = "<a id=\"#$2\" data-hs-anchor='true'></a>\n<$1>$2</$1>"; // This is an anchor
+      textContentNew = textContentNew.replace(search,anchorLine) // Replaces headers with headers plus anchors
+          
+      //FIXME the anchors link should also be URL-friendly
     }
 
+  updateText();
   assembleResult();
     
 }
