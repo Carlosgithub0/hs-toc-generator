@@ -7,6 +7,8 @@ body{
     background-color: azure;
 }
 
+/* WRAPPERS */
+
 .debugButtonsWrapper {
     display:flex;
     flex-direction: row;
@@ -19,9 +21,8 @@ body{
     width: 800px;
 }
 
-
 .formBeforeWrapper, .formAfterWrapper, .formViewWrapper{
-margin:10px
+    margin:10px;
 }
 
 .formViewWrapper{
@@ -34,6 +35,8 @@ margin:10px
     height:435px;
 }
 
+/* ELEMENTS */
+
 textarea {
     resize: none;
 }
@@ -42,4 +45,12 @@ button{
     display:flex;
     max-height: 40px;
     margin:5px;
+}
+
+#btnGenerateToc{
+    background-color: chartreuse
+}
+
+#btnGenerateToc:hover{
+    background-color:greenyellow;
 }
