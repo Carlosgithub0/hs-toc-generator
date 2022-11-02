@@ -9,12 +9,10 @@ const textView = document.querySelector("#textView");
 
 // regex rules // 
 const isHeaderRegex = /<(h[23])>(.*)<\/\1>/i; // should get h2 and h3 headers only, plus content inside
-const regexBody = /(?<=<a id='#)(.*)(?=' data-hs-anchor='true')/gi;
-
-
-generateSampleBasic();
+const headerHasTagsRegex = /<(\/?)strong>|<(\/?)b>/gi; // should get tags <strong> and <b> (both open and close
 
 // Add sample at the start //
+generateSampleBasic();
 textView.innerHTML = textOld.value;
 
 /* Button */
@@ -34,41 +32,41 @@ function generateToc(){
     textView.innerHTML = textNew.value; // Show result in User View panel
   }
 
-	for (const line of textOld.value.split('\n')) {
-		//console.log("Line is " + line)
+	for (const line of textOld.value.split('\n')) { // For every line of textOld (line is defined by the split \n)
+		
 		// It is a header
 		match = line.match(isHeaderRegex)
 		if (match != null) {
-			//console.log("match is " + match)
-			const ref = match[2].replaceAll(" ", "-").toLowerCase();
-			//console.log("ref is " + ref)
-			anchor = createAnchor(ref)
-			//console.log("anchor line is " + anchor)
-			textContentNew += anchor// + line + "\n"
-			tocLine = createTocLine(ref, match[2])
-			//console.log("toc line is " + tocLine)
-			tocContent += tocLine
+    
+      /* Make header inner HTML (ref) URL-friendly by
+        1. replacing Tags with "" (regex rule headerHasTagsRegex)
+        2. replacing spaces with dashes
+        3. making it lower case
+      */
+      const ref = match[2].replaceAll(headerHasTagsRegex,"").replaceAll(" ", "-").toLowerCase(); // ref is URL-Friendly version replaces + lower cases the inner html of the header 
+			
+      // Toc content//
+      tocLine = createTocLine(ref) // defines Toc line
+      tocContent += tocLine // adds Toc line to Toc
+
+      // Anchor lines //
+      anchor = createAnchor(ref) // defines anchor line
+			textContentNew += anchor// adds anchor line to text
+
 		} else {
-			//console.log("Not a header: " + line)
+
 		}
 			textContentNew += line + "\n"
 	}
 
-  // Generate TOC
-  // for (const match of textOld.value.matchAll(search)) {
-  //   const ref = match[2].replaceAll(" ", "-").toLowerCase();
-  //   tocContent += tocLine + "\n"; 
-  //   }
-
 	// Add anchors to text (textContentNew)
 	function createAnchor(ref) {
-		//FIXME the anchors link should also be URL-friendly
-		return `<a id="#${ref}" data-hs-anchor='true'></a>\n`; // This is an anchor
-		//textContentNew = textContentNew.replace(search,anchorLine) // Replaces headers with headers plus anchors
+		return `<a id="${ref}" data-hs-anchor='true'></a>\n`; // This is an anchor
 	}
 
-	function createTocLine(ref, header) {
-		return `<li><a href="#${ref}">` + header + "</a></li>\n";
+	function createTocLine(ref) {
+    const headerClean = match[2].replaceAll(headerHasTagsRegex,"")
+		return `<li><a href="#${ref}">` + headerClean + "</a></li>\n";
 	}
 
   assembleResult();
@@ -77,7 +75,7 @@ function generateToc(){
 
 function generateSampleBasic(){
 textOld.value = `<p>p text</p>
-<h2>h2 Text</h2>
+<h2><strong>h2 Text</strong></h2>
 <p>p text 1</p>
 <h3>h3 Text 1</h3>
 <p>p text 2</p>
